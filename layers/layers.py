@@ -84,7 +84,8 @@ class GraphEncoderLayer(layers.Layer):
         self.multi_graph_convolution_layer =  MultiGraphConvolutionLayer(graph_convolution_units, activation, dropout_rate, edges)
         self.graph_aggregation_layer = GraphAggregationLayer(auxiliary_units, activation, dropout_rate)
         
-    def call(self, inputs, training=False):
+    def call(self, inputs, training=False, test=True):
+        
         output = self.multi_graph_convolution_layer(inputs)
         
         node_tensor= inputs[1]
@@ -95,6 +96,7 @@ class GraphEncoderLayer(layers.Layer):
         else:
             _,node_tensor = inputs                    
             annotations = tf.concat((output,node_tensor),-1)
+            
         
         output = self.graph_aggregation_layer(annotations)
         return output
