@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras import layers
+from typing import Dict
 
 class GraphConvolutionLayer(layers.Layer):
     """ Graph convolution layer used in molecular GANs. Based on work by Nicola De Cao et al. https://arxiv.org/abs/1805.11973"""
@@ -7,7 +8,7 @@ class GraphConvolutionLayer(layers.Layer):
         super(GraphConvolutionLayer, self).__init__(name=name, **kwargs)
         self.activation = activation
         self.dropout_rate = dropout_rate
-        self.unit = units
+        self.units = units
         self.edges = edges
         
         self.dense1 = [layers.Dense(units=self.units) for _ in range(edges-1)]
@@ -40,7 +41,7 @@ class GraphConvolutionLayer(layers.Layer):
         output = self.dropout(output)
         return adjacency_tensor, node_tensor, output
     
-      def get_config(self) -> Dict:
+    def get_config(self) -> Dict:
         """Returns config dictionary for this layer."""
         config = super(GraphConvolutionLayer, self).get_config()
         config['activation'] = self.activation

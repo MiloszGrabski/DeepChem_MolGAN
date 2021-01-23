@@ -125,3 +125,4 @@ dmypy.json
 .pyre/
 .tmp.drivedownload/1240576.driveupload
 *.driveupload
+.vscode/settings.json
