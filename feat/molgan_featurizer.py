@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import rdkit.Chem as Chem
 
-from deepchem.utils.typing import RDKitAtom, RDKitBond, RDKitMol, List
+from deepchem.utils.typing import RDKitBond, RDKitMol, List
 from deepchem.feat.base_classes import MolecularFeaturizer
 
 logger = logging.getLogger(__name__)
@@ -33,7 +33,8 @@ class GraphMatrix:
 class MolGanFeaturizer(MolecularFeaturizer):
     """This class implements featurizer used with MolGAN de-novo molecular generation based on:
     `MolGAN: An implicit generative model for small molecular graphs`<https://arxiv.org/abs/1805.11973>`_.
-    The default representation is in form of GraphMatrix object, being wrapper for two matrices containing atom and bond type information.
+    The default representation is in form of GraphMatrix object.
+    It is wrapper for two matrices containing atom and bond type information.
     The class also provides reverse capabilities"""
 
     def __init__(
@@ -47,7 +48,8 @@ class MolGanFeaturizer(MolecularFeaturizer):
         Parameters
         ----------
         max_atom_count: int, default 9
-            Maximum number of atoms used for creation of adjacency matrix, molecules cannot have more atoms than this number; implicit hydrogens do not count.
+            Maximum number of atoms used for creation of adjacency matrix.
+            Molecules cannot have more atoms than this number; implicit hydrogens do not count.
         kekulize: bool, default True
             Should molecules be kekulized; solves number of issues with defeaturization when used.
         bond_labels: List[RDKitBond]
@@ -59,7 +61,7 @@ class MolGanFeaturizer(MolecularFeaturizer):
         self.kekulize = kekulize
 
         # bond labels
-        if bond_labels == None:
+        if bond_labels is None:
             self.bond_labels = [
                 Chem.rdchem.BondType.ZERO,
                 Chem.rdchem.BondType.SINGLE,
@@ -122,7 +124,7 @@ class MolGanFeaturizer(MolecularFeaturizer):
     def _defeaturize(
         self, graph_matrix: GraphMatrix, sanitize: bool = True, cleanup=True
     ) -> RDKitMol:
-        """Recreate RDKitMol from GraphMatrix object. For working correctly same object needs to be used for featurization and defeaturization.
+        """Recreate RDKitMol from GraphMatrix object. Same object needs to be used for featurization and defeaturization.
 
         Parameters
         ----------
@@ -156,7 +158,7 @@ class MolGanFeaturizer(MolecularFeaturizer):
         if sanitize:
             try:
                 Chem.SanitizeMol(mol)
-            except:
+            except Exception:
                 mol = None
 
         if cleanup:
@@ -167,7 +169,7 @@ class MolGanFeaturizer(MolecularFeaturizer):
                     mol = Chem.MolFromSmiles(smiles)
                 else:
                     mol = None
-            except:
+            except Exception:
                 mol = None
 
         return mol
