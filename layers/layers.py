@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import layers
 
 class GraphConvolutionLayer(layers.Layer):
+    """ Graph convolution layer used in molecular GANs. Based on work by Nicola De Cao et al. https://arxiv.org/abs/1805.11973"""
     def __init__(self, units, activation=None, dropout_rate=0., edges=5, name='', **kwargs):
         super(GraphConvolutionLayer, self).__init__(name=name, **kwargs)
         self.activation = activation
@@ -49,6 +50,7 @@ class GraphConvolutionLayer(layers.Layer):
         return config
 
 class GraphAggregationLayer(layers.Layer):
+    """ Graph Aggregation layer used in molecular GANs. Based on work by Nicola De Cao et al. https://arxiv.org/abs/1805.11973"""
     def __init__(self, units, activation=None, dropout_rate=0., name='', **kwargs):
         super(GraphAggregationLayer, self).__init__(name=name, **kwargs)
         self.units = units
@@ -78,6 +80,7 @@ class GraphAggregationLayer(layers.Layer):
         return config
     
 class MultiGraphConvolutionLayer(layers.Layer):
+    """Multiple calls on Graph convolution layer where data from previous layer is used in the next one."""
     def __init__(self, units, activation=None, dropout_rate = 0., edges=5, name='', **kwargs):
         super(MultiGraphConvolutionLayer, self).__init__(name=name, **kwargs)
         if len(units) < 2:
@@ -115,6 +118,7 @@ class MultiGraphConvolutionLayer(layers.Layer):
         return config
     
 class GraphEncoderLayer(layers.Layer):
+    """ Graph encoder layer used in molecular GANs. Based on work by Nicola De Cao et al. https://arxiv.org/abs/1805.11973"""
     def __init__(self, units, activation='tanh', dropout_rate=0., edges= 5, name='', **kwargs):
         super(GraphEncoderLayer, self).__init__(name=name, **kwargs)
         self.graph_convolution_units, self.auxiliary_units = units
